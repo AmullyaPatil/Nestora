@@ -13,9 +13,8 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
   ].filter(Boolean),
-  
-  // ✅ Set the correct base path for GitHub Pages
-  base: "/nestotaa/", // Change this if your repo name is different
+
+  base: "/Nestora/",
   
   resolve: {
     alias: {
