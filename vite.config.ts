@@ -14,8 +14,8 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
   ].filter(Boolean),
 
-  // base: "/Nestora/",
-  base: "./",
+  base: "/Nestora/",
+  // base: "./",
 
   
   resolve: {
