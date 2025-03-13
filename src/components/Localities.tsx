@@ -1,6 +1,6 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -8,51 +8,53 @@ import { cn } from '@/lib/utils';
 const localities = [
   {
     id: 1,
-    name: "Renuka Nagar",
+    name: "Vidyanagar",
     price: "Starting at ₹1.2M",
     properties: 24,
     image: "https://images.unsplash.com/photo-1518481852452-9415dscf0e3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
   },
   {
     id: 2,
-    name: "Navanagar",
+    name: "Keshwapur",
     price: "Starting at ₹850K",
     properties: 16,
     image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
   },
   {
     id: 3,
-    name: "Vidhya Nagar",
+    name: "Deshpande Nagar",
     price: "Starting at ₹950K",
     properties: 21,
     image: "https://images.unsplash.com/photo-1573059756025-0038d4ffcbe2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80",
   },
   {
     id: 4,
-    name: "Keshwapur",
+    name: "Navanagar",
     price: "Starting at ₹1.5M",
     properties: 12,
     image: "https://images.unsplash.com/photo-1574259392081-dbd30e96bda7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=765&q=80",
   },
   {
     id: 5,
-    name: "Gokul",
+    name: "Unkal",
     price: "Starting at ₹1.1M",
     properties: 9,
     image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   },
   {
     id: 6,
-    name: "Kusugal",
+    name: "Gokul Road",
     price: "Starting at ₹2.2M",
     properties: 7,
     image: "https://images.unsplash.com/photo-1483401757487-2ced3fa77952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1173&q=80",
   },
 ];
 
+
 const Localities = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -81,8 +83,7 @@ const Localities = () => {
   }, []);
 
   const handleViewAllLocalities = () => {
-    // In a real app, this would navigate to a localities page
-    alert("View all localities button clicked. This would navigate to a full localities listing page in a production environment.");
+    navigate('/localities');
   };
 
   return (
@@ -118,8 +119,8 @@ const Localities = () => {
         "mt-12 text-center transition-all duration-700 delay-700", 
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       )}>
-        <Button 
-          className="bg-Nestora-blue hover:bg-Nestora-accent text-white rounded-full px-8 py-6"
+       <Button 
+          className="bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-full px-8 py-6"
           onClick={handleViewAllLocalities}
         >
           View All Localities <ArrowRight className="ml-2 h-5 w-5" />
