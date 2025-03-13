@@ -119,8 +119,9 @@ const Localities = () => {
         "mt-12 text-center transition-all duration-700 delay-700", 
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       )}>
+        
        <Button 
-          className="bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-full px-8 py-6"
+          className="bg-Nestora-blue hover:bg-Nestora-accent text-white rounded-full px-8 py-6"
           onClick={handleViewAllLocalities}
         >
           View All Localities <ArrowRight className="ml-2 h-5 w-5" />

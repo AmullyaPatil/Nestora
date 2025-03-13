@@ -149,7 +149,7 @@ const AllProperties = () => {
         )}>
           <div className="mb-8">
             <Link to="/">
-              <Button variant="ghost" className="pl-0 hover:bg-estate-blue/10 hover:text-estate-blue mb-4">
+              <Button variant="ghost" className="pl-0 hover:bg-gray-50 hover:text-estate-blue mb-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Home
               </Button>

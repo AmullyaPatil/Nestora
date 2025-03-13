@@ -102,7 +102,7 @@ const AllLocalities = () => {
       <main className="pt-32 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="mb-8 flex items-center">
           <Link to="/">
-            <Button variant="ghost" className="p-0 mr-4">
+            <Button variant="ghost" className="hover:bg-gray-50">
               <ArrowLeft className="h-5 w-5 mr-2" />
               Back to Home
             </Button>
