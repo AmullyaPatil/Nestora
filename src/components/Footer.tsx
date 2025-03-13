@@ -5,16 +5,16 @@ import { Button } from '@/components/ui/button';
 
 const Footer = () => {
   return (
-    <footer className="bg-estate-dark text-white">
+    <footer className="bg-Nestora-dark text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
           {/* Company Information */}
           <div>
             <h3 className="text-2xl font-bold font-display mb-6">
-              Estate<span className="text-estate-blue">Hub</span>
+              Nestora<span className="text-Nestora-blue">Hub</span>
             </h3>
             <p className="text-gray-400 mb-6">
-              Your trusted partner in finding the perfect property. We strive to provide exceptional service and expertise in all aspects of real estate.
+              Your trusted partner in finding the perfect property. We strive to provide exceptional service and expertise in all aspects of real Nestora.
             </p>
             <div className="flex space-x-4">
               <SocialIcon icon={<Facebook className="h-5 w-5" />} />
@@ -54,14 +54,14 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-6">Stay Updated</h4>
             <p className="text-gray-400 mb-4">
-              Subscribe to our newsletter for the latest property listings and real estate news.
+              Subscribe to our newsletter for the latest property listings and real Nestora news.
             </p>
             <div className="flex space-x-0">
               <Input 
                 placeholder="Your email address" 
-                className="rounded-l-full rounded-r-none border-r-0 bg-gray-800 border-gray-700 text-white focus:ring-estate-blue focus:border-estate-blue"
+                className="rounded-l-full rounded-r-none border-r-0 bg-gray-800 border-gray-700 text-white focus:ring-Nestora-blue focus:border-Nestora-blue"
               />
-              <Button className="bg-estate-blue hover:bg-estate-accent text-white rounded-l-none rounded-r-full">
+              <Button className="bg-Nestora-blue hover:bg-Nestora-accent text-white rounded-l-none rounded-r-full">
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
@@ -70,15 +70,16 @@ const Footer = () => {
 
         {/* Contact Info Bar */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-gray-800">
-          <ContactItem icon={<MapPin className="h-5 w-5" />} text="123 Real Estate Ave, Beverly Hills, CA 90210" />
-          <ContactItem icon={<Phone className="h-5 w-5" />} text="+1 (555) 123-4567" />
-          <ContactItem icon={<Mail className="h-5 w-5" />} text="info@estatehub.com" />
+          <ContactItem icon={<MapPin className="h-5 w-5" />} text="Nestora Ave, Sri Sai Properties,
+Vidya Nagar, Hubli 580001" />
+          <ContactItem icon={<Phone className="h-5 w-5" />} text="(+91) 99026 76457" />
+          <ContactItem icon={<Mail className="h-5 w-5" />} text="info@Nestora.com" />
         </div>
 
         {/* Copyright */}
         <div className="text-center pt-8 border-t border-gray-800">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} EstateHub. All rights reserved.
+            © {new Date().getFullYear()} Nestora. All rights reserved.
           </p>
           <div className="flex justify-center space-x-6 mt-4">
             <a href="#" className="text-gray-500 hover:text-white text-sm">Privacy Policy</a>
@@ -93,7 +94,7 @@ const Footer = () => {
 
 const SocialIcon = ({ icon }: { icon: React.ReactNode }) => {
   return (
-    <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-estate-blue transition-colors">
+    <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-Nestora-blue transition-colors">
       {icon}
     </a>
   );
@@ -115,7 +116,7 @@ const FooterLink = ({ href, children }: { href: string; children: React.ReactNod
 const ContactItem = ({ icon, text }: { icon: React.ReactNode; text: string }) => {
   return (
     <div className="flex items-center text-gray-400">
-      <div className="mr-3 text-estate-blue">{icon}</div>
+      <div className="mr-3 text-Nestora-blue">{icon}</div>
       <span>{text}</span>
     </div>
   );

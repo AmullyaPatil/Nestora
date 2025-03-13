@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Home, Building, Briefcase, User, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +29,7 @@ const servicesData = [
   {
     id: 4,
     title: "Investment Consulting",
-    description: "Make informed decisions with our expert real estate investment consulting.",
+    description: "Make informed decisions with our expert real Nestora investment consulting.",
     icon: User,
     color: "bg-indigo-700",
   }
@@ -39,6 +38,7 @@ const servicesData = [
 const Services = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -66,28 +66,35 @@ const Services = () => {
     };
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section 
       id="services" 
-      className="py-20 bg-gray-50"
+      className="py-18 bg-gray-50"
       ref={sectionRef}
     >
       <div className="section-container">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge className="bg-estate-blue/10 text-estate-blue hover:bg-estate-blue/20 mb-4">
+          <Badge className="bg-Nestora-blue/10 text-Nestora-blue hover:bg-Nestora-blue/20 mb-4">
             Our Services
           </Badge>
           <h2 className={cn(
             "text-3xl md:text-4xl font-bold mb-4 transition-all duration-700 delay-100",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}>
-            Comprehensive Real Estate Solutions
+            Comprehensive Real Nestora Solutions
           </h2>
           <p className={cn(
             "text-gray-600 transition-all duration-700 delay-200",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}>
-            We offer a wide range of services to meet all your real estate needs, from finding your dream home to 
+            We offer a wide range of services to meet all your real Nestora needs, from finding your dream home to 
             maximizing your investment returns.
           </p>
         </div>
@@ -99,6 +106,7 @@ const Services = () => {
               service={service} 
               isVisible={isVisible}
               delay={index * 100 + 300}
+              scrollToSection={scrollToSection}
             />
           ))}
         </div>
@@ -111,14 +119,14 @@ interface ServiceCardProps {
   service: typeof servicesData[0];
   isVisible: boolean;
   delay: number;
+  scrollToSection: (sectionId: string) => void;
 }
 
-const ServiceCard = ({ service, isVisible, delay }: ServiceCardProps) => {
+const ServiceCard = ({ service, isVisible, delay, scrollToSection }: ServiceCardProps) => {
   const { title, description, icon: Icon, color } = service;
 
   const handleLearnMore = () => {
-    // In a real app, this would navigate to the service detail page
-    alert(`Learn more about ${title}. This would navigate to a detailed page about this service in a production environment.`);
+    scrollToSection('contact');
   };
 
   return (
@@ -127,16 +135,16 @@ const ServiceCard = ({ service, isVisible, delay }: ServiceCardProps) => {
         "bg-white rounded-xl p-6 hover:shadow-md transition-all duration-500 border border-gray-100",
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       )}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{ transitionDelay: `₹{delay}ms` }}
     >
-      <div className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center mb-5`}>
+      <div className={`w-12 h-12 ₹{color} rounded-lg flex items-center justify-center mb-5`}>
         <Icon className="h-6 w-6 text-white" />
       </div>
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-4">{description}</p>
       <Button 
         variant="link" 
-        className="p-0 h-auto text-estate-blue hover:text-estate-accent group"
+        className="p-0 h-auto text-Nestora-blue hover:text-Nestora-accent group"
         onClick={handleLearnMore}
       >
         Learn More <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />

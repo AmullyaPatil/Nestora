@@ -54,8 +54,8 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <a href="/" className="flex items-center">
-          <span className="text-2xl font-display font-bold text-estate-dark">
-            Estate<span className="text-estate-blue">Hub</span>
+          <span className="text-2xl font-display font-bold text-Nestora-dark">
+            Nestora<span className="text-Nestora-blue">Hub</span>
           </span>
         </a>
 
@@ -72,7 +72,7 @@ const Header = () => {
         {/* Contact Button (Desktop) */}
         <div className="hidden md:block">
           <Button 
-            className="bg-estate-blue hover:bg-estate-accent text-white rounded-full px-6 transition-colors duration-300"
+            className="bg-Nestora-blue hover:bg-Nestora-accent text-white rounded-full px-6 transition-colors duration-300"
             onClick={() => scrollToSection('contact')}
           >
             Get in Touch
@@ -81,7 +81,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-estate-dark p-2 focus:outline-none" 
+          className="md:hidden text-Nestora-dark p-2 focus:outline-none" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
@@ -97,7 +97,7 @@ const Header = () => {
         )}
       >
         <button 
-          className="absolute top-6 right-6 text-estate-dark p-2 focus:outline-none" 
+          className="absolute top-6 right-6 text-Nestora-dark p-2 focus:outline-none" 
           onClick={closeMenu}
           aria-label="Close menu"
         >
@@ -114,7 +114,7 @@ const Header = () => {
         </nav>
         <div className="mt-6">
           <Button 
-            className="bg-estate-blue hover:bg-estate-accent text-white rounded-full w-full"
+            className="bg-Nestora-blue hover:bg-Nestora-accent text-white rounded-full w-full"
             onClick={() => scrollToSection('contact')}
           >
             Get in Touch
@@ -130,7 +130,7 @@ const NavItem = ({ href, label, onClick }: { href: string; label: string; onClic
   return (
     <a 
       href={href}
-      className="relative px-4 py-2 text-estate-dark hover:text-estate-blue font-medium text-sm transition-colors duration-200"
+      className="relative px-4 py-2 text-Nestora-dark hover:text-Nestora-blue font-medium text-sm transition-colors duration-200"
       onClick={(e) => {
         e.preventDefault();
         onClick();
@@ -146,7 +146,7 @@ const MobileNavItem = ({ href, label, onClick }: { href: string; label: string, 
   return (
     <a 
       href={href}
-      className="py-3 text-lg font-medium text-estate-dark border-b border-gray-100"
+      className="py-3 text-lg font-medium text-Nestora-dark border-b border-gray-100"
       onClick={(e) => {
         e.preventDefault();
         onClick();
