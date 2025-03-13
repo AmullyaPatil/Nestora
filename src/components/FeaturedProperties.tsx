@@ -11,7 +11,7 @@ const properties = [
   {
     id: 1,
     title: "Neelgund Developers LLP",
-    price: "₹1,25,000",
+    price: "₹12,550,000",
     address: "Renuka Nagar, Hubli",
     beds: 4,
     baths: 3,
@@ -23,7 +23,7 @@ const properties = [
   {
     id: 2,
     title: "Millenium Properties",
-    price: "₹5,500/mo",
+    price: "₹25,500/mo",
     address: "Bairidevarkoppa, Hubli",
     beds: 3,
     baths: 2.5,
@@ -35,7 +35,7 @@ const properties = [
   {
     id: 3,
     title: "SkyTown Builders",
-    price: "₹850,000",
+    price: "₹100,500,000",
     address: "Keshwapur, Hubli",
     beds: 2,
     baths: 2,
@@ -47,7 +47,7 @@ const properties = [
   {
     id: 4,
     title: "Marvel Properties",
-    price: "₹3,200,000",
+    price: "₹100,000,000",
     address: "Navanagar, Hubli",
     beds: 5,
     baths: 4.5,

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
         {
           id: 1,
           title: "Modern Minimalist Villa",
-          price: "₹1,250,000",
+          price: "₹12,550,000",
           address: "Vidyanagar, Hubli",
           beds: 4,
           baths: 3,
@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
         {
           id: 2,
           title: "Luxury Beachfront Condo",
-          price: "₹5,500/mo",
+          price: "₹25,500/mo",
           address: "Keshwapur, Hubli",
           beds: 3,
           baths: 2.5,
@@ -34,7 +34,7 @@ import { Link } from 'react-router-dom';
         {
           id: 3,
           title: "Contemporary City Apartment",
-          price: "₹850,000",
+          price: "₹100,500,000",
           address: "Deshpande Nagar, Hubli",
           beds: 2,
           baths: 2,
@@ -46,7 +46,7 @@ import { Link } from 'react-router-dom';
         {
           id: 4,
           title: "Panoramic Mountain Retreat",
-          price: "₹3,200,000",
+          price: "₹100,000,000",
           address: "Navanagar, Hubli",
           beds: 5,
           baths: 4.5,
@@ -70,7 +70,7 @@ import { Link } from 'react-router-dom';
         {
           id: 6,
           title: "Downtown Loft Apartment",
-          price: "₹3,800/mo",
+          price: "₹55,000/mo",
           address: "Unkal, Hubli",
           beds: 2,
           baths: 2,
@@ -82,7 +82,7 @@ import { Link } from 'react-router-dom';
         {
           id: 7,
           title: "Countryside Farmhouse",
-          price: "₹950,000",
+          price: "₹100,950,000",
           address: "Karwar Road, Hubli",
           beds: 4,
           baths: 3,
@@ -94,7 +94,7 @@ import { Link } from 'react-router-dom';
         {
           id: 8,
           title: "Urban Penthouse Suite",
-          price: "₹7,500/mo",
+          price: "₹50,500/mo",
           address: "Gandhi Nagar, Hubli",
           beds: 3,
           baths: 3.5,
@@ -106,7 +106,7 @@ import { Link } from 'react-router-dom';
         {
           id: 9,
           title: "Historic Brick Townhouse",
-          price: "₹1,750,000",
+          price: "₹100,750,000",
           address: "Neeligin Road, Hubli",
           beds: 4,
           baths: 3,
@@ -118,7 +118,7 @@ import { Link } from 'react-router-dom';
         {
           id: 10,
           title: "Lakefront Cottage",
-          price: "₹980,000",
+          price: "₹380,000,000",
           address: "Hosur, Hubli",
           beds: 3,
           baths: 2,
