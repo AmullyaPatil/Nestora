@@ -11,12 +11,20 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === "development" && componentTagger(),
   ].filter(Boolean),
+  
+  // ✅ Set the correct base path for GitHub Pages
+  base: "/nestotaa/", // Change this if your repo name is different
+  
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
   },
 }));
