@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
@@ -8,8 +7,11 @@ import Localities from '@/components/Localities';
 import Testimonials from '@/components/Testimonials';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import { useLocation } from 'react-router-dom';
 
 const Index = () => {
+  const location = useLocation();
+
   // Initialize intersection observer for animations
   useEffect(() => {
     const animateOnScroll = () => {
@@ -54,6 +56,21 @@ const Index = () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
+
+  // Check if we're coming back from search with query params
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    
+    if (params.has('location') || params.has('type') || params.has('price')) {
+      // Scroll to properties section if coming back with search params
+      const propertiesSection = document.getElementById('properties');
+      if (propertiesSection) {
+        setTimeout(() => {
+          propertiesSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.search]);
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">

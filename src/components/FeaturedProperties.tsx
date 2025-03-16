@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Bed, Bath, Maximize, MapPin, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,13 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
-// Property data
 const properties = [
   {
     id: 1,
-    title: "Neelgund Developers LLP",
-    price: "₹12,550,000",
-    address: "Renuka Nagar, Hubli",
+    title: "Modern Minimalist Villa",
+    price: "₹1.25 Cr",
+    address: "Vidyanagar, Hubli",
     beds: 4,
     baths: 3,
     sqft: 2800,
@@ -22,9 +20,9 @@ const properties = [
   },
   {
     id: 2,
-    title: "Millenium Properties",
-    price: "₹25,500/mo",
-    address: "Bairidevarkoppa, Hubli",
+    title: "Luxury Beachfront Condo",
+    price: "₹55,000/mo",
+    address: "Keshwapur, Hubli",
     beds: 3,
     baths: 2.5,
     sqft: 1950,
@@ -34,9 +32,9 @@ const properties = [
   },
   {
     id: 3,
-    title: "SkyTown Builders",
-    price: "₹100,500,000",
-    address: "Keshwapur, Hubli",
+    title: "Contemporary City Apartment",
+    price: "₹85 L",
+    address: "Navanagar, Hubli",
     beds: 2,
     baths: 2,
     sqft: 1200,
@@ -46,9 +44,9 @@ const properties = [
   },
   {
     id: 4,
-    title: "Marvel Properties",
-    price: "₹100,000,000",
-    address: "Navanagar, Hubli",
+    title: "Panoramic Mountain Retreat",
+    price: "₹3.2 Cr",
+    address: "Unkal, Hubli",
     beds: 5,
     baths: 4.5,
     sqft: 3600,

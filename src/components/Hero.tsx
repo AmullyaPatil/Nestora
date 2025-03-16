@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
-import { ArrowRight, MapPin, Home, Building } from 'lucide-react';
+import { ArrowRight, MapPin, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 const heroImages = [
   'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80',
@@ -13,12 +13,11 @@ const heroImages = [
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Set initial load
     setIsLoaded(true);
 
-    // Set up image carousel rotation
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
     }, 6000);
@@ -26,19 +25,47 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Property search options
+
   const propertyTypes = ['Residential', 'Commercial', 'Land', 'Luxury'];
   const [selectedType, setSelectedType] = useState('Residential');
 
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+
+  const hubliLocations = [
+    'Vidyanagar',
+    'Keshwapur',
+    'Navanagar',
+    'Unkal',
+    'Gokul Road'
+  ];
+
+  const priceRanges = [
+    '₹50L - ₹1Cr',
+    '₹1Cr - ₹2Cr',
+    '₹2Cr - ₹5Cr',
+    '₹5Cr - ₹10Cr',
+    '₹10Cr+'
+  ];
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, this would navigate to a search results page
-    alert("Search initiated! This would navigate to search results page in a production environment.");
-    // Scroll to the properties section as a fallback
-    const propertiesSection = document.getElementById('properties');
-    if (propertiesSection) {
-      propertiesSection.scrollIntoView({ behavior: 'smooth' });
+    
+    const params = new URLSearchParams();
+    
+    if (selectedLocation) {
+      params.append('location', selectedLocation);
     }
+    
+    if (selectedType) {
+      params.append('type', selectedType);
+    }
+    
+    if (selectedPriceRange) {
+      params.append('price', selectedPriceRange);
+    }
+    
+    navigate(`/properties?${params.toString()}`);
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -116,8 +143,8 @@ const Hero = () => {
                   className={cn(
                     "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
                     selectedType === type 
-                      ? "bg-Nestora-blue text-white" 
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      ? "bg-estate-blue text-white" 
+                      : "bg-gray-100 text-gray-600 hover:bg-estate-blue/10 hover:text-estate-blue"
                   )}
                   onClick={() => setSelectedType(type)}
                 >
@@ -131,40 +158,32 @@ const Hero = () => {
                 <label className="block text-sm font-medium text-gray-500 mb-2">Location</label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <select className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none">
-                    <option>Any Location</option>
-                    <option>Bairidevarkoppa</option>
-                    <option>Keshwapur</option>
-                    <option>Renuka Nagar</option>
-                    <option>Navanagar</option>
+                  <select 
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-estate-blue appearance-none"
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                  >
+                    <option value="">Any Location</option>
+                    {hubliLocations.map((location) => (
+                      <option key={location} value={location}>{location}</option>
+                    ))}
                   </select>
                 </div>
               </div>
-              
-              {/* <div className="relative">
-                <label className="block text-sm font-medium text-gray-500 mb-2">Property Type</label>
-                <div className="relative">
-                  <Home className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <select className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none">
-                    <option>Any Type</option>
-                    <option>House</option>
-                    <option>Apartment</option>
-                    <option>Villa</option>
-                    <option>Land</option>
-                  </select>
-                </div>
-              </div> */}
               
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-500 mb-2">Price Range</label>
                 <div className="relative">
                   <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <select className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none">
-                    <option>Any Price</option>
-                    <option>₹20000 - ₹30000</option>
-                    <option>₹40000 - ₹80000</option>
-                    <option>₹80000 - ₹120000</option>
-                    <option>₹120000+</option>
+                  <select 
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-estate-blue appearance-none"
+                    value={selectedPriceRange}
+                    onChange={(e) => setSelectedPriceRange(e.target.value)}
+                  >
+                    <option value="">Any Price</option>
+                    {priceRanges.map((range) => (
+                      <option key={range} value={range}>{range}</option>
+                    ))}
                   </select>
                 </div>
               </div>
