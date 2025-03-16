@@ -94,7 +94,7 @@ const FeaturedProperties = () => {
       )}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
           <div>
-            <Badge className="bg-estate-blue/10 text-estate-blue hover:bg-estate-blue/20 mb-4">
+            <Badge className="bg-Nestora-blue/10 text-Nestora-blue hover:bg-Nestora-blue/20 mb-4">
               Featured Properties
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Discover Our Premium Selection</h2>
@@ -104,7 +104,7 @@ const FeaturedProperties = () => {
           </div>
           <div className="mt-6 md:mt-0">
             <Link to="/properties">
-              <Button className="bg-white hover:bg-gray-50 text-estate-dark border border-gray-200 rounded-full group hover:text-estate-blue">
+              <Button className="bg-white hover:bg-gray-50 text-Nestora-dark border border-gray-200 rounded-full group hover:text-Nestora-blue">
                 View All Properties
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>

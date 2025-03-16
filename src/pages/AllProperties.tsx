@@ -228,7 +228,7 @@ const AllProperties = () => {
         )}>
           <div className="mb-8">
             <Link to="/">
-              <Button variant="ghost" className="pl-0 hover:bg-gray-50 hover:text-estate-blue mb-4">
+              <Button variant="ghost" className="pl-0 hover:bg-gray-50 hover:text-Nestora-blue mb-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Home
               </Button>
@@ -267,7 +267,7 @@ const AllProperties = () => {
               <h3 className="text-xl font-medium mb-4">No properties found</h3>
               <p className="text-gray-500 mb-6">Try adjusting your search filters to find properties.</p>
               <Link to="/">
-                <Button className="bg-estate-blue hover:bg-estate-blue/90">
+                <Button className="bg-Nestora-blue hover:bg-Nestora-blue/90">
                   Return to Home
                 </Button>
               </Link>
@@ -320,7 +320,7 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
           <Badge className={cn(
             "text-xs font-semibold px-3 py-1",
             property.type === "For Sale" 
-              ? "bg-estate-blue text-white" 
+              ? "bg-Nestora-blue text-white" 
               : "bg-purple-500 text-white"
           )}>
             {property.type}
@@ -347,7 +347,7 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
       {/* Content */}
       <div className="p-5">
         <div className="mb-2">
-          <h3 className="text-lg font-bold text-estate-dark mb-1">{property.title}</h3>
+          <h3 className="text-lg font-bold text-Nestora-dark mb-1">{property.title}</h3>
           <div className="flex items-center text-gray-500 text-sm">
             <MapPin className="h-3.5 w-3.5 mr-1" />
             <span>{property.address}</span>
@@ -355,7 +355,7 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
         </div>
 
         <div className="flex justify-between items-center mb-4">
-          <div className="text-estate-blue font-bold text-xl">{property.price}</div>
+          <div className="text-Nestora-blue font-bold text-xl">{property.price}</div>
         </div>
 
         <div className="border-t border-gray-100 pt-4 flex justify-between">

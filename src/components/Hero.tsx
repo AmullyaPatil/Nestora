@@ -143,8 +143,8 @@ const Hero = () => {
                   className={cn(
                     "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
                     selectedType === type 
-                      ? "bg-estate-blue text-white" 
-                      : "bg-gray-100 text-gray-600 hover:bg-estate-blue/10 hover:text-estate-blue"
+                      ? "bg-Nestora-blue text-white" 
+                      : "bg-gray-100 text-gray-600 hover:bg-Nestora-blue/10 hover:text-Nestora-blue"
                   )}
                   onClick={() => setSelectedType(type)}
                 >
@@ -159,7 +159,7 @@ const Hero = () => {
                 <div className="relative">
                   <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <select 
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-estate-blue appearance-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
                   >
@@ -176,7 +176,7 @@ const Hero = () => {
                 <div className="relative">
                   <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <select 
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-estate-blue appearance-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
                     value={selectedPriceRange}
                     onChange={(e) => setSelectedPriceRange(e.target.value)}
                   >
