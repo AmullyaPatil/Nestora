@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 // Property type for wishlist items
 export type WishlistProperty = {
@@ -22,17 +23,34 @@ type WishlistContextType = {
 };
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
+// Cookie name for storing wishlist data
+const WISHLIST_COOKIE_NAME = 'real_estate_wishlist';
+// Cookie expiration in days (e.g., 30 days)
+const COOKIE_EXPIRATION_DAYS = 30;
 
 export const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
-  // Initialize state from localStorage if available
+  // Initialize state from cookies if available
   const [wishlist, setWishlist] = useState<WishlistProperty[]>(() => {
-    const savedWishlist = localStorage.getItem('wishlist');
-    return savedWishlist ? JSON.parse(savedWishlist) : [];
+    const savedWishlist = Cookies.get(WISHLIST_COOKIE_NAME);
+    try {
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    } catch (error) {
+      console.error('Error parsing wishlist cookie:', error);
+      return [];
+    }
   });
 
-  // Save to localStorage whenever wishlist changes
+  // Save to cookies whenever wishlist changes
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    try {
+      Cookies.set(WISHLIST_COOKIE_NAME, JSON.stringify(wishlist), { 
+        expires: COOKIE_EXPIRATION_DAYS,
+        sameSite: 'strict',
+        secure: window.location.protocol === 'https:'
+      });
+    } catch (error) {
+      console.error('Error saving wishlist to cookie:', error);
+    }
   }, [wishlist]);
 
   const addToWishlist = (property: WishlistProperty) => {
