@@ -112,7 +112,7 @@ const FeaturedProperties = () => {
                 </Button>
             </Link>
             <Link to="/wishlist">
-              <Button className="bg-estate-blue hover:bg-estate-blue/90 text-white rounded-full group">
+              <Button className="bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-full group">
                 My Wishlist
                 <Heart className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
               </Button>
