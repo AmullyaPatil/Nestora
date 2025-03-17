@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useWishlist, WishlistProperty } from '@/contexts/WishlistContext';
 
 const allProperties = [
   {
@@ -233,33 +234,42 @@ const AllProperties = () => {
                 Back to Home
               </Button>
             </Link>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">Properties</h1>
-
-            {/* Filter information */}
-            {location.search && (
-              <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                <h2 className="font-medium mb-2">Applied Filters:</h2>
-                <div className="flex flex-wrap gap-2">
-                  {new URLSearchParams(location.search).get('location') && (
-                    <Badge variant="outline" className="bg-gray-100">
-                      Location: {new URLSearchParams(location.search).get('location')}
-                    </Badge>
-                  )}
-                  {new URLSearchParams(location.search).get('price') && (
-                    <Badge variant="outline" className="bg-gray-100">
-                      Price: {new URLSearchParams(location.search).get('price')}
-                    </Badge>
-                  )}
-                </div>
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">Properties</h1>
+                
+                {location.search && (
+                  <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h2 className="font-medium mb-2">Applied Filters:</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {new URLSearchParams(location.search).get('location') && (
+                        <Badge variant="outline" className="bg-gray-100">
+                          Location: {new URLSearchParams(location.search).get('location')}
+                        </Badge>
+                      )}
+                      {new URLSearchParams(location.search).get('price') && (
+                        <Badge variant="outline" className="bg-gray-100">
+                          Price: {new URLSearchParams(location.search).get('price')}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                <p className="text-gray-600 max-w-2xl">
+                  {filteredProperties.length === 0 
+                    ? "No properties match your search criteria. Please try different filters."
+                    : `Showing ${filteredProperties.length} properties that match your criteria.`
+                  }
+                </p>
               </div>
-            )}
-
-            <p className="text-gray-600 max-w-2xl">
-              {filteredProperties.length === 0
-                ? "No properties match your search criteria. Please try different filters."
-                : `Showing ${filteredProperties.length} properties that match your criteria.`
-              }
-            </p>
+              <Link to="/wishlist">
+                <Button className="bg-estate-blue hover:bg-estate-blue/90 text-white rounded-full group">
+                  My Wishlist
+                  <Heart className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
           
           {filteredProperties.length === 0 ? (
@@ -297,7 +307,25 @@ interface PropertyCardProps {
 }
 
 const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { toast } = useToast();
+  const isFavorite = isInWishlist(property.id);
+
+  const handleToggleWishlist = () => {
+    if (isFavorite) {
+      removeFromWishlist(property.id);
+      toast({
+        title: "Removed from wishlist",
+        description: `${property.title} has been removed from your wishlist.`
+      });
+    } else {
+      addToWishlist(property as WishlistProperty);
+      toast({
+        title: "Added to wishlist",
+        description: `${property.title} has been added to your wishlist.`
+      });
+    }
+  };
 
   return (
     <div 
@@ -338,7 +366,7 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
               ? "bg-red-500 text-white" 
               : "bg-white text-gray-600 hover:bg-gray-100"
           )}
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={handleToggleWishlist}
         >
           <Heart className="h-4 w-4" fill={isFavorite ? "currentColor" : "none"} />
         </button>

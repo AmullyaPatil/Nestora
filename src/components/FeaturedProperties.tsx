@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { useWishlist, WishlistProperty } from '@/contexts/WishlistContext';
+import { useToast } from '@/hooks/use-toast';
 
 const properties = [
   {
@@ -102,11 +104,17 @@ const FeaturedProperties = () => {
               Explore our handpicked collection of exclusive properties, designed to meet your highest expectations and lifestyle needs.
             </p>
           </div>
-          <div className="mt-6 md:mt-0">
+          <div className="mt-6 md:mt-0 flex gap-4">
             <Link to="/properties">
               <Button className="bg-white hover:bg-gray-50 text-Nestora-dark border border-gray-200 rounded-full group hover:text-Nestora-blue">
                 View All Properties
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+            </Link>
+            <Link to="/wishlist">
+              <Button className="bg-estate-blue hover:bg-estate-blue/90 text-white rounded-full group">
+                My Wishlist
+                <Heart className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
               </Button>
             </Link>
           </div>
@@ -135,7 +143,25 @@ interface PropertyCardProps {
 }
 
 const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { toast } = useToast();
+  const isFavorite = isInWishlist(property.id);
+
+  const handleToggleWishlist = () => {
+    if (isFavorite) {
+      removeFromWishlist(property.id);
+      toast({
+        title: "Removed from wishlist",
+        description: `${property.title} has been removed from your wishlist.`
+      });
+    } else {
+      addToWishlist(property as WishlistProperty);
+      toast({
+        title: "Added to wishlist",
+        description: `${property.title} has been added to your wishlist.`
+      });
+    }
+  };
 
   return (
     <div 
@@ -176,7 +202,7 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
               ? "bg-red-500 text-white" 
               : "bg-white text-gray-600 hover:bg-gray-100"
           )}
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={handleToggleWishlist}
         >
           <Heart className="h-4 w-4" fill={isFavorite ? "currentColor" : "none"} />
         </button>

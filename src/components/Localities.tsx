@@ -138,9 +138,11 @@ interface LocalityCardProps {
 }
 
 const LocalityCard = ({ locality, isVisible, delay }: LocalityCardProps) => {
+  const navigate = useNavigate();
+
   const handleViewLocality = () => {
-    // In a real app, this would navigate to a specific locality page
-    alert(`Viewing details for ₹{locality.name}. This would navigate to a locality details page in a production environment.`);
+    // Navigate to properties page with location filter
+    navigate(`/properties?location=${locality.name}`);
   };
 
   return (
