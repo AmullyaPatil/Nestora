@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useAuth } from './AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 // Property type for wishlist items
 export type WishlistProperty = {
@@ -24,13 +27,19 @@ type WishlistContextType = {
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 // Cookie name for storing wishlist data
-const WISHLIST_COOKIE_NAME = 'real_estate_wishlist';
+const WISHLIST_COOKIE_NAME = 'real_Nestora_wishlist';
 // Cookie expiration in days (e.g., 30 days)
 const COOKIE_EXPIRATION_DAYS = 30;
 
 export const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
-  // Initialize state from cookies if available
+  const { isAuthenticated, user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  // Initialize state from cookies if available and user is authenticated
   const [wishlist, setWishlist] = useState<WishlistProperty[]>(() => {
+    if (!isAuthenticated) return [];
+ 
     const savedWishlist = Cookies.get(WISHLIST_COOKIE_NAME);
     try {
       return savedWishlist ? JSON.parse(savedWishlist) : [];
@@ -40,20 +49,47 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
     }
   });
 
+  // Clear wishlist when user logs out and load user's wishlist when logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      const savedWishlist = Cookies.get(WISHLIST_COOKIE_NAME);
+      try {
+        if (savedWishlist) {
+          setWishlist(JSON.parse(savedWishlist));
+        }
+      } catch (error) {
+        console.error('Error parsing wishlist cookie:', error);
+      }
+    } else {
+      setWishlist([]);
+    }
+  }, [isAuthenticated]);
+
   // Save to cookies whenever wishlist changes
   useEffect(() => {
-    try {
-      Cookies.set(WISHLIST_COOKIE_NAME, JSON.stringify(wishlist), { 
-        expires: COOKIE_EXPIRATION_DAYS,
-        sameSite: 'strict',
-        secure: window.location.protocol === 'https:'
-      });
-    } catch (error) {
-      console.error('Error saving wishlist to cookie:', error);
+    if (isAuthenticated) {
+      try {
+        Cookies.set(WISHLIST_COOKIE_NAME, JSON.stringify(wishlist), { 
+          expires: COOKIE_EXPIRATION_DAYS,
+          sameSite: 'strict',
+          secure: window.location.protocol === 'https:'
+        });
+      } catch (error) {
+        console.error('Error saving wishlist to cookie:', error);
+      }
     }
-  }, [wishlist]);
+  }, [wishlist, isAuthenticated]);
 
   const addToWishlist = (property: WishlistProperty) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to add properties to your wishlist",
+      });
+      navigate('/login');
+      return;
+    }
+    
     setWishlist(prev => {
       // Only add if not already in wishlist
       if (!prev.some(item => item.id === property.id)) {
@@ -64,10 +100,14 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
   };
 
   const removeFromWishlist = (propertyId: number) => {
+    if (!isAuthenticated) return;
+    
     setWishlist(prev => prev.filter(property => property.id !== propertyId));
   };
 
   const isInWishlist = (propertyId: number) => {
+    if (!isAuthenticated) return false;
+    
     return wishlist.some(property => property.id === propertyId);
   };
 

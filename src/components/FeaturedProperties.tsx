@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Bed, Bath, Maximize, MapPin, Heart } from 'lucide-react';
+import { ArrowRight, Bed, Bath, Maximize, MapPin, Heart, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useWishlist, WishlistProperty } from '@/contexts/WishlistContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -61,6 +61,50 @@ const properties = [
 const FeaturedProperties = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  
+  // Search state
+  const [selectedType, setSelectedType] = useState('Residential');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+
+  const propertyTypes = ['Residential', 'Commercial', 'Land', 'Luxury'];
+  
+  const hubliLocations = [
+    'Vidyanagar',
+    'Keshwapur',
+    'Navanagar',
+    'Unkal',
+    'Gokul Road'
+  ];
+
+  const priceRanges = [
+    '₹50L - ₹1Cr',
+    '₹1Cr - ₹2Cr',
+    '₹2Cr - ₹5Cr',
+    '₹5Cr - ₹10Cr',
+    '₹10Cr+'
+  ];
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const params = new URLSearchParams();
+    
+    if (selectedLocation) {
+      params.append('location', selectedLocation);
+    }
+    
+    if (selectedType) {
+      params.append('type', selectedType);
+    }
+    
+    if (selectedPriceRange) {
+      params.append('price', selectedPriceRange);
+    }
+    
+    navigate(`/properties?${params.toString()}`);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -94,7 +138,7 @@ const FeaturedProperties = () => {
         "transition-all duration-700 delay-100", 
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       )}>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <Badge className="bg-Nestora-blue/10 text-Nestora-blue hover:bg-Nestora-blue/20 mb-4">
               Featured Properties
@@ -118,6 +162,74 @@ const FeaturedProperties = () => {
               </Button>
             </Link>
           </div>
+          </div>
+
+{/* Search Section - Moved from Hero */}
+<div className="glass-panel rounded-2xl max-w-4xl mx-auto mb-12 shadow-subtle">
+  <form onSubmit={handleSearch} className="p-6 md:p-8">
+    <div className="flex flex-wrap gap-6 mb-6">
+      {propertyTypes.map((type) => (
+        <button
+          key={type}
+          type="button"
+          className={cn(
+            "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+            selectedType === type 
+              ? "bg-Nestora-blue text-white" 
+              : "bg-gray-100 text-gray-600 hover:bg-Nestora-blue/10 hover:text-Nestora-blue"
+          )}
+          onClick={() => setSelectedType(type)}
+        >
+          {type}
+        </button>
+      ))}
+    </div>
+    
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="relative">
+        <label className="block text-sm font-medium text-gray-500 mb-2">Location</label>
+        <div className="relative">
+          <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+          <select 
+            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+          >
+            <option value="">Any Location</option>
+            {hubliLocations.map((location) => (
+              <option key={location} value={location}>{location}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      
+      <div className="relative">
+        <label className="block text-sm font-medium text-gray-500 mb-2">Price Range</label>
+        <div className="relative">
+          <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+          <select 
+            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
+            value={selectedPriceRange}
+            onChange={(e) => setSelectedPriceRange(e.target.value)}
+          >
+            <option value="">Any Price</option>
+            {priceRanges.map((range) => (
+              <option key={range} value={range}>{range}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div className="mt-6">
+      <Button 
+        type="submit" 
+        className="w-full bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-lg py-6"
+      >
+        Search Properties
+      </Button>
+    </div>
+  </form>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
