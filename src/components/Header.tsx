@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, User, Heart, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -70,17 +71,17 @@ const Header = () => {
   return (
     <header 
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-6 md:px-12',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-6 md:px-12 bg-white',
         isScrolled 
-          ? 'py-4 bg-white bg-opacity-90 backdrop-blur-md shadow-subtle' 
-          : 'py-6 bg-transparent'
+          ? 'py-4 shadow-subtle' 
+          : 'py-6'
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <a href="/" className="flex items-center">
           <span className="text-2xl font-display font-bold text-Nestora-dark">
-            Nestora<span className="text-Nestora-blue">Hub</span>
+            Estate<span className="text-Nestora-blue">Hub</span>
           </span>
         </a>
 
@@ -94,8 +95,8 @@ const Header = () => {
           <NavItem href="#contact" label="Contact Us" onClick={() => scrollToSection('contact')} />
         </nav>
 
-         {/* Auth Buttons (Desktop) */}
-         <div className="hidden md:flex items-center gap-4">
+        {/* Auth Buttons (Desktop) */}
+        <div className="hidden md:flex items-center gap-4">
           {isAuthenticated ? (
             <div className="relative">
               <Button 
@@ -177,7 +178,7 @@ const Header = () => {
           <MobileNavItem href="#localities" label="Localities" onClick={() => scrollToSection('localities')} />
           <MobileNavItem href="#testimonials" label="Testimonials" onClick={() => scrollToSection('testimonials')} />
           <MobileNavItem href="#contact" label="Contact Us" onClick={() => scrollToSection('contact')} />
-                  
+          
           {isAuthenticated ? (
             <>
               <div className="border-t border-gray-100 my-4 pt-4">

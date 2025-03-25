@@ -7,25 +7,24 @@ import { WishlistProvider } from "./contexts/WishlistContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
-import AllProperties from "./pages/AllProperties";
 import AllLocalities from "./pages/AllLocalities";
 import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-    <BrowserRouter basename="/Nestora">
+      <BrowserRouter basename="/Nestora">
         <AuthProvider>
           <WishlistProvider>
             <Toaster />
             <Sonner />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/properties" element={<AllProperties />} />
               <Route path="/localities" element={<AllLocalities />} />
               <Route path="/wishlist" element={
                 <ProtectedRoute>

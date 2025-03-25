@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Bed, Bath, Maximize, MapPin, Heart, Building } from 'lucide-react';
+import { ArrowRight, Bed, Bath, Maximize, MapPin, Heart, Building, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useWishlist, WishlistProperty } from '@/contexts/WishlistContext';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import PropertyDetails from './PropertyDetails';
 
+// Updated property data with 5 Hubli locations and Indian Rupee prices
 const properties = [
   {
     id: 1,
@@ -60,8 +64,13 @@ const properties = [
 
 const FeaturedProperties = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [showFiltered, setShowFiltered] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<typeof properties[0] | null>(null);
+  const [isPropertyDetailsOpen, setIsPropertyDetailsOpen] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   
   // Search state
   const [selectedType, setSelectedType] = useState('Residential');
@@ -86,25 +95,94 @@ const FeaturedProperties = () => {
     '₹10Cr+'
   ];
 
+  const isPropertyInPriceRange = (propertyPrice: string, priceRange: string): boolean => {
+    const propertyValue = convertPriceToValue(propertyPrice);
+    
+    // Parse the price range string
+    const [minPriceStr, maxPriceStr] = priceRange.split(' - ');
+    
+    let minValue = 0;
+    let maxValue = Number.MAX_VALUE;
+    
+    // Parse minimum value
+    if (minPriceStr.includes('Cr')) {
+      minValue = parseFloat(minPriceStr.replace(/[^0-9.]/g, '')) * 100;
+    } else if (minPriceStr.includes('L')) {
+      minValue = parseFloat(minPriceStr.replace(/[^0-9.]/g, ''));
+    }
+    
+    // Parse maximum value
+    if (maxPriceStr.includes('Cr+')) {
+      maxValue = Number.MAX_VALUE;
+    } else if (maxPriceStr.includes('Cr')) {
+      maxValue = parseFloat(maxPriceStr.replace(/[^0-9.]/g, '')) * 100;
+    } else if (maxPriceStr.includes('L')) {
+      maxValue = parseFloat(maxPriceStr.replace(/[^0-9.]/g, ''));
+    }
+    
+    return propertyValue >= minValue && propertyValue <= maxValue;
+  };
+
+  const convertPriceToValue = (priceString: string): number => {
+    const cleanPrice = priceString.replace('₹', '').replace('/mo', '');
+    
+    // Extract the numeric part
+    const numericPart = cleanPrice.replace(/[^0-9.]/g, '');
+    const value = parseFloat(numericPart);
+    
+    if (cleanPrice.includes('Cr')) {
+      return value * 100;
+    } else if (cleanPrice.includes('L')) {
+      return value;
+    } else {
+      // Monthly rent to yearly in lakhs
+      return (value * 12) / 100000;
+    }
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const params = new URLSearchParams();
+    let filtered = [...properties];
     
     if (selectedLocation) {
-      params.append('location', selectedLocation);
-    }
-    
-    if (selectedType) {
-      params.append('type', selectedType);
+      filtered = filtered.filter(property => 
+        property.address.includes(selectedLocation)
+      );
     }
     
     if (selectedPriceRange) {
-      params.append('price', selectedPriceRange);
+      filtered = filtered.filter(property => 
+        isPropertyInPriceRange(property.price, selectedPriceRange)
+      );
     }
     
-    navigate(`/properties?${params.toString()}`);
+    setFilteredProperties(filtered);
+    setShowFiltered(true);
+    
+    if (filtered.length === 0) {
+      toast({
+        title: "No properties found",
+        description: "Try different filter criteria to see more properties.",
+        variant: "destructive",
+      });
+    }
   };
+
+  const handleResetFilters = () => {
+    setSelectedType('Residential');
+    setSelectedLocation('');
+    setSelectedPriceRange('');
+    setFilteredProperties(properties);
+    setShowFiltered(false);
+  };
+
+  const handlePropertyClick = (property: typeof properties[0]) => {
+    setSelectedProperty(property);
+    setIsPropertyDetailsOpen(true);
+  };
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -153,7 +231,7 @@ const FeaturedProperties = () => {
               <Button className="bg-white hover:bg-gray-50 text-Nestora-dark border border-gray-200 rounded-full group hover:text-Nestora-blue">
                 View All Properties
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+              </Button>
             </Link>
             <Link to="/wishlist">
               <Button className="bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-full group">
@@ -162,104 +240,173 @@ const FeaturedProperties = () => {
               </Button>
             </Link>
           </div>
+        </div>
+
+        {/* Search Section - More compact layout */}
+        <div className="glass-panel rounded-2xl max-w-4xl mx-auto mb-12 shadow-subtle">
+          <form onSubmit={handleSearch} className="p-6">
+            <div className="flex flex-wrap gap-4 mb-6">
+              {propertyTypes.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className={cn(
+                    "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                    selectedType === type 
+                      ? "bg-Nestora-blue text-white" 
+                      : "bg-gray-100 text-gray-600 hover:bg-Nestora-blue/10 hover:text-Nestora-blue"
+                  )}
+                  onClick={() => setSelectedType(type)}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+            
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:flex-1">
+                <div className="relative">
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <select 
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
+                      value={selectedLocation}
+                      onChange={(e) => setSelectedLocation(e.target.value)}
+                    >
+                      <option value="">Any Location</option>
+                      {hubliLocations.map((location) => (
+                        <option key={location} value={location}>{location}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="relative">
+                  <div className="relative">
+                    <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <select 
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
+                      value={selectedPriceRange}
+                      onChange={(e) => setSelectedPriceRange(e.target.value)}
+                    >
+                      <option value="">Any Price</option>
+                      {priceRanges.map((range) => (
+                        <option key={range} value={range}>{range}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-lg h-12"
+              >
+                <Search className="mr-2 h-4 w-4" />
+                Search
+              </Button>
+            </div>
+            
+            {showFiltered && (
+              <div className="mt-4 flex justify-between items-center">
+                <p className="text-sm text-gray-500">
+                  {filteredProperties.length === 0 
+                    ? "No properties match your search criteria."
+                    : `Showing ${filteredProperties.length} properties`
+                  }
+                </p>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  className="text-sm h-8 px-2"
+                  onClick={handleResetFilters}
+                >
+                  Reset Filters
+                </Button>
+              </div>
+            )}
+          </form>
+        </div>
+
+        {showFiltered ? (
+          <div>
+            <h3 className="text-2xl font-bold mb-6">Search Results</h3>
+            {filteredProperties.length === 0 ? (
+              <div className="text-center py-12 bg-gray-50 rounded-xl">
+                <h4 className="text-xl font-medium mb-2">No properties found</h4>
+                <p className="text-gray-500 mb-6">Try adjusting your search filters to find properties.</p>
+                <Button 
+                  onClick={handleResetFilters} 
+                  className="bg-Nestora-blue hover:bg-Nestora-blue/90"
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                {filteredProperties.map((property, index) => (
+                  <PropertyCard 
+                    key={property.id} 
+                    property={property} 
+                    isVisible={isVisible}
+                    delay={index * 100}
+                    onClick={() => handlePropertyClick(property)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-
-{/* Search Section - Moved from Hero */}
-<div className="glass-panel rounded-2xl max-w-4xl mx-auto mb-12 shadow-subtle">
-  <form onSubmit={handleSearch} className="p-6 md:p-8">
-    <div className="flex flex-wrap gap-6 mb-6">
-      {propertyTypes.map((type) => (
-        <button
-          key={type}
-          type="button"
-          className={cn(
-            "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
-            selectedType === type 
-              ? "bg-Nestora-blue text-white" 
-              : "bg-gray-100 text-gray-600 hover:bg-Nestora-blue/10 hover:text-Nestora-blue"
-          )}
-          onClick={() => setSelectedType(type)}
-        >
-          {type}
-        </button>
-      ))}
-    </div>
-    
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="relative">
-        <label className="block text-sm font-medium text-gray-500 mb-2">Location</label>
-        <div className="relative">
-          <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-          <select 
-            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-          >
-            <option value="">Any Location</option>
-            {hubliLocations.map((location) => (
-              <option key={location} value={location}>{location}</option>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {properties.map((property, index) => (
+              <PropertyCard 
+                key={property.id} 
+                property={property} 
+                isVisible={isVisible}
+                delay={index * 100}
+                onClick={() => handlePropertyClick(property)}
+              />
             ))}
-          </select>
-        </div>
+          </div>
+        )}
       </div>
-      
-      <div className="relative">
-        <label className="block text-sm font-medium text-gray-500 mb-2">Price Range</label>
-        <div className="relative">
-          <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-          <select 
-            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
-            value={selectedPriceRange}
-            onChange={(e) => setSelectedPriceRange(e.target.value)}
-          >
-            <option value="">Any Price</option>
-            {priceRanges.map((range) => (
-              <option key={range} value={range}>{range}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </div>
-    
-    <div className="mt-6">
-      <Button 
-        type="submit" 
-        className="w-full bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-lg py-6"
-      >
-        Search Properties
-      </Button>
-    </div>
-  </form>
-        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {properties.map((property, index) => (
-            <PropertyCard 
-              key={property.id} 
-              property={property} 
-              isVisible={isVisible}
-              delay={index * 100}
-            />
-          ))}
-        </div>
-      </div>
+      <PropertyDetails 
+        property={selectedProperty}
+        isOpen={isPropertyDetailsOpen}
+        onClose={() => setIsPropertyDetailsOpen(false)}
+      />
     </section>
   );
 };
-
 
 interface PropertyCardProps {
   property: typeof properties[0];
   isVisible: boolean;
   delay: number;
+  onClick: () => void;
 }
 
-const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
+const PropertyCard = ({ property, isVisible, delay, onClick }: PropertyCardProps) => {
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const isFavorite = isInWishlist(property.id);
 
-  const handleToggleWishlist = () => {
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click event
+    
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to add properties to your wishlist",
+        variant: "destructive",
+      });
+      navigate('/login');
+      return;
+    }
+    
     if (isFavorite) {
       removeFromWishlist(property.id);
       toast({
@@ -278,12 +425,13 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
   return (
     <div 
       className={cn(
-        "property-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-subtle transition-all duration-700",
+        "property-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-subtle transition-all duration-700 cursor-pointer hover:shadow-md",
         isVisible 
           ? "opacity-100 translate-y-0" 
           : "opacity-0 translate-y-10"
       )}
-      style={{ transitionDelay: `₹{delay}ms` }}
+      style={{ transitionDelay: `${delay}ms` }}
+      onClick={onClick}
     >
       {/* Image container */}
       <div className="relative img-hover-zoom h-64">
