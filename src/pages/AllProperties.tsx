@@ -1,182 +1,14 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Bed, Bath, Maximize, MapPin, Heart } from 'lucide-react';
+import { ArrowLeft, Bed, Bath, Maximize, MapPin, Heart, Building, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useWishlist, WishlistProperty } from '@/contexts/WishlistContext';
 import PropertyDetails from '@/components/PropertyDetails';
-
-const allProperties = [
-  {
-    id: 1,
-    title: "Modern Minimalist Villa",
-    price: "₹1.25 Cr",
-    address: "Vidyanagar, Hubli",
-    beds: 4,
-    baths: 3,
-    sqft: 2800,
-    type: "For Sale",
-    isNew: true,
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80",
-  },
-  {
-    id: 2,
-    title: "Luxury Beachfront Condo",
-    price: "₹55,000/mo",
-    address: "Keshwapur, Hubli",
-    beds: 3,
-    baths: 2.5,
-    sqft: 1950,
-    type: "For Rent",
-    isNew: false,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 3,
-    title: "Contemporary City Apartment",
-    price: "₹85 L",
-    address: "Navanagar, Hubli",
-    beds: 2,
-    baths: 2,
-    sqft: 1200,
-    type: "For Sale",
-    isNew: true,
-    image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 4,
-    title: "Panoramic Mountain Retreat",
-    price: "₹3.2 Cr",
-    address: "Unkal, Hubli",
-    beds: 5,
-    baths: 4.5,
-    sqft: 3600,
-    type: "For Sale",
-    isNew: false,
-    image: "https://images.unsplash.com/photo-1602343168117-bb8a12d7c180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80",
-  },
-  {
-    id: 5,
-    title: "Coastal Luxury Mansion",
-    price: "₹4.5 Cr",
-    address: "Gokul Road, Hubli",
-    beds: 6,
-    baths: 5,
-    sqft: 4200,
-    type: "For Sale",
-    isNew: true,
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 6,
-    title: "Downtown Loft Apartment",
-    price: "₹38,000/mo",
-    address: "Vidyanagar, Hubli",
-    beds: 2,
-    baths: 2,
-    sqft: 1800,
-    type: "For Rent",
-    isNew: false,
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 7,
-    title: "Countryside Farmhouse",
-    price: "₹95 L",
-    address: "Keshwapur, Hubli",
-    beds: 4,
-    baths: 3,
-    sqft: 2500,
-    type: "For Sale",
-    isNew: false,
-    image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 8,
-    title: "Urban Penthouse Suite",
-    price: "₹75,000/mo",
-    address: "Navanagar, Hubli",
-    beds: 3,
-    baths: 3.5,
-    sqft: 2200,
-    type: "For Rent",
-    isNew: true,
-    image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 9,
-    title: "Historic Brick Townhouse",
-    price: "₹1.75 Cr",
-    address: "Unkal, Hubli",
-    beds: 4,
-    baths: 3,
-    sqft: 2400,
-    type: "For Sale",
-    isNew: false,
-    image: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 10,
-    title: "Lakefront Cottage",
-    price: "₹98 L",
-    address: "Gokul Road, Hubli",
-    beds: 3,
-    baths: 2,
-    sqft: 1750,
-    type: "For Sale",
-    isNew: true,
-    image: "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-  },
-];
-
-const convertPriceToValue = (priceString: string): number => {
-  const cleanPrice = priceString.replace('₹', '').replace('/mo', '');
-  
-  // Extract the numeric part
-  const numericPart = cleanPrice.replace(/[^0-9.]/g, '');
-  const value = parseFloat(numericPart);
-  
-  if (cleanPrice.includes('Cr')) {
-    return value * 100;
-  } else if (cleanPrice.includes('L')) {
-    return value;
-  } else {
-    // Monthly rent to yearly in lakhs
-    return (value * 12) / 100000;
-  }
-};
-
-const isPropertyInPriceRange = (propertyPrice: string, priceRange: string): boolean => {
-  const propertyValue = convertPriceToValue(propertyPrice);
-  
-  // Parse the price range string
-  const [minPriceStr, maxPriceStr] = priceRange.split(' - ');
-  
-  let minValue = 0;
-  let maxValue = Number.MAX_VALUE;
-  
-  // Parse minimum value
-  if (minPriceStr.includes('Cr')) {
-    minValue = parseFloat(minPriceStr.replace(/[^0-9.]/g, '')) * 100;
-  } else if (minPriceStr.includes('L')) {
-    minValue = parseFloat(minPriceStr.replace(/[^0-9.]/g, ''));
-  }
-  
-  // Parse maximum value
-  if (maxPriceStr.includes('Cr+')) {
-    maxValue = Number.MAX_VALUE;
-  } else if (maxPriceStr.includes('Cr')) {
-    maxValue = parseFloat(maxPriceStr.replace(/[^0-9.]/g, '')) * 100;
-  } else if (maxPriceStr.includes('L')) {
-    maxValue = parseFloat(maxPriceStr.replace(/[^0-9.]/g, ''));
-  }
-  
-  console.log(`Property: ${propertyPrice} (${propertyValue}L) | Range: ${minValue}L - ${maxValue === Number.MAX_VALUE ? 'MAX' : maxValue + 'L'} | Match: ${propertyValue >= minValue && propertyValue <= maxValue}`);
-  
-  return propertyValue >= minValue && propertyValue <= maxValue;
-};
+import { allProperties, isPropertyInPriceRange } from '@/data/properties';
 
 const AllProperties = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -186,6 +18,29 @@ const AllProperties = () => {
   const location = useLocation();
   const { toast } = useToast();
   
+  // Search state for AllProperties
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+
+  const propertyTypes = ['Residential', 'Commercial', 'Land', 'Luxury'];
+  
+  const hubliLocations = [
+    'Vidyanagar',
+    'Keshwapur',
+    'Navanagar',
+    'Unkal',
+    'Gokul Road'
+  ];
+
+  const priceRanges = [
+    '₹50L - ₹1Cr',
+    '₹1Cr - ₹2Cr',
+    '₹2Cr - ₹5Cr',
+    '₹5Cr - ₹10Cr',
+    '₹10Cr+'
+  ];
+  
   useEffect(() => {
     setIsVisible(true);
     window.scrollTo(0, 0);
@@ -193,12 +48,26 @@ const AllProperties = () => {
     const params = new URLSearchParams(location.search);
     const locationFilter = params.get('location');
     const priceFilter = params.get('price');
+    const typeFilter = params.get('type');
     
-    console.log("Filtering with:", { locationFilter, priceFilter });
+    console.log("Filtering with:", { locationFilter, priceFilter, typeFilter });
     
     let filtered = [...allProperties];
     
+    // Apply type filter if present
+    if (typeFilter) {
+      setSelectedType(typeFilter);
+      filtered = filtered.filter(property => {
+        if (typeFilter === 'Residential') return property.type === 'For Sale' || property.type === 'For Rent';
+        if (typeFilter === 'Luxury') return property.price.includes('Cr');
+        if (typeFilter === 'Commercial') return property.title.toLowerCase().includes('commercial') || property.title.toLowerCase().includes('office');
+        if (typeFilter === 'Land') return property.title.toLowerCase().includes('land') || property.beds === 0;
+        return true;
+      });
+    }
+    
     if (locationFilter) {
+      setSelectedLocation(locationFilter);
       filtered = filtered.filter(property => 
         property.address.includes(locationFilter)
       );
@@ -206,6 +75,7 @@ const AllProperties = () => {
     }
     
     if (priceFilter) {
+      setSelectedPriceRange(priceFilter);
       filtered = filtered.filter(property => 
         isPropertyInPriceRange(property.price, priceFilter)
       );
@@ -214,7 +84,7 @@ const AllProperties = () => {
     
     setFilteredProperties(filtered);
     
-    if (filtered.length === 0 && (locationFilter || priceFilter)) {
+    if (filtered.length === 0 && (locationFilter || priceFilter || typeFilter)) {
       toast({
         title: "No properties found",
         description: "Try different filter criteria to see more properties.",
@@ -228,6 +98,53 @@ const AllProperties = () => {
     setIsPropertyDetailsOpen(true);
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Apply filters to the properties
+    let filtered = [...allProperties];
+    
+    // Filter by property type
+    if (selectedType) {
+      filtered = filtered.filter(property => {
+        if (selectedType === 'Residential') return property.type === 'For Sale' || property.type === 'For Rent';
+        if (selectedType === 'Luxury') return property.price.includes('Cr');
+        if (selectedType === 'Commercial') return property.title.toLowerCase().includes('commercial') || property.title.toLowerCase().includes('office');
+        if (selectedType === 'Land') return property.title.toLowerCase().includes('land') || property.beds === 0;
+        return true;
+      });
+    }
+    
+    if (selectedLocation) {
+      filtered = filtered.filter(property => 
+        property.address.includes(selectedLocation)
+      );
+    }
+    
+    if (selectedPriceRange) {
+      filtered = filtered.filter(property => 
+        isPropertyInPriceRange(property.price, selectedPriceRange)
+      );
+    }
+    
+    setFilteredProperties(filtered);
+    
+    if (filtered.length === 0) {
+      toast({
+        title: "No properties found",
+        description: "Try different filter criteria to see more properties.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSelectedType('');
+    setSelectedLocation('');
+    setSelectedPriceRange('');
+    setFilteredProperties(allProperties);
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="pt-24 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
@@ -237,7 +154,7 @@ const AllProperties = () => {
         )}>
           <div className="mb-8">
             <Link to="/">
-              <Button variant="ghost" className="pl-0 hover:bg-gray-50 hover:text-Nestora-blue mb-4">
+              <Button variant="ghost" className="pl-0 hover:bg-Nestora-blue/10 hover:text-Nestora-blue mb-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Home
               </Button>
@@ -260,6 +177,11 @@ const AllProperties = () => {
                           Price: {new URLSearchParams(location.search).get('price')}
                         </Badge>
                       )}
+                      {new URLSearchParams(location.search).get('type') && (
+                        <Badge variant="outline" className="bg-gray-100">
+                          Type: {new URLSearchParams(location.search).get('type')}
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 )}
@@ -280,15 +202,108 @@ const AllProperties = () => {
             </div>
           </div>
           
+          {/* Search Section */}
+          <div className="glass-panel rounded-2xl max-w-4xl mx-auto mb-12 shadow-subtle">
+            <form onSubmit={handleSearch} className="p-6">
+              <div className="mb-6">
+                <ToggleGroup type="single" value={selectedType} onValueChange={(value) => value && setSelectedType(value)} className="flex flex-wrap justify-center gap-2">
+                  <ToggleGroupItem 
+                    value=""
+                    className={cn(
+                      "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                      selectedType === "" 
+                        ? "bg-Nestora-blue text-white data-[state=on]:bg-Nestora-blue data-[state=on]:text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-Nestora-blue/10 hover:text-Nestora-blue data-[state=on]:bg-Nestora-blue/10 data-[state=on]:text-Nestora-blue"
+                    )}
+                  >
+                    All Types
+                  </ToggleGroupItem>
+                  {propertyTypes.map((type) => (
+                    <ToggleGroupItem 
+                      key={type} 
+                      value={type}
+                      className={cn(
+                        "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                        selectedType === type 
+                          ? "bg-Nestora-blue text-white data-[state=on]:bg-Nestora-blue data-[state=on]:text-white" 
+                          : "bg-gray-100 text-gray-600 hover:bg-Nestora-blue/10 hover:text-Nestora-blue data-[state=on]:bg-Nestora-blue/10 data-[state=on]:text-Nestora-blue"
+                      )}
+                    >
+                      {type}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
+              
+              <div className="flex flex-row gap-4 items-center">
+                <div className="grid grid-cols-2 gap-4 flex-1">
+                  <div className="relative">
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <select 
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
+                        value={selectedLocation}
+                        onChange={(e) => setSelectedLocation(e.target.value)}
+                      >
+                        <option value="">Any Location</option>
+                        {hubliLocations.map((location) => (
+                          <option key={location} value={location}>{location}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="relative">
+                      <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <select 
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-Nestora-blue appearance-none"
+                        value={selectedPriceRange}
+                        onChange={(e) => setSelectedPriceRange(e.target.value)}
+                      >
+                        <option value="">Any Price</option>
+                        {priceRanges.map((range) => (
+                          <option key={range} value={range}>{range}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  className="bg-Nestora-blue hover:bg-Nestora-blue/90 text-white rounded-lg h-12"
+                >
+                  <Search className="mr-2 h-4 w-4" />
+                  Search
+                </Button>
+              </div>
+              
+              {location.search && (
+                <div className="mt-4 flex justify-between items-center">
+                  <p className="text-sm text-gray-500">
+                    Filtered results
+                  </p>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    className="text-sm h-8 px-2"
+                    onClick={handleResetFilters}
+                  >
+                    Reset Filters
+                  </Button>
+                </div>
+              )}
+            </form>
+          </div>
+          
           {filteredProperties.length === 0 ? (
             <div className="text-center py-12">
               <h3 className="text-xl font-medium mb-4">No properties found</h3>
               <p className="text-gray-500 mb-6">Try adjusting your search filters to find properties.</p>
-              <Link to="/">
-                <Button className="bg-Nestora-blue hover:bg-Nestora-blue/90">
-                  Return to Home
-                </Button>
-              </Link>
+              <Button onClick={handleResetFilters} className="bg-Nestora-blue hover:bg-Nestora-blue/90">
+                Clear Filters
+              </Button>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -353,10 +368,9 @@ const PropertyCard = ({ property, isVisible, delay, onClick }: PropertyCardProps
           ? "opacity-100 translate-y-0" 
           : "opacity-0 translate-y-10"
       )}
-      style={{ transitionDelay: `₹{delay}ms` }}
+      style={{ transitionDelay: `${delay}ms` }}
       onClick={onClick}
     >
-      {/* Image container */}
       <div className="relative img-hover-zoom h-64">
         <img 
           src={property.image} 
@@ -391,7 +405,6 @@ const PropertyCard = ({ property, isVisible, delay, onClick }: PropertyCardProps
         </button>
       </div>
 
-      {/* Content */}
       <div className="p-5">
         <div className="mb-2">
           <h3 className="text-lg font-bold text-Nestora-dark mb-1">{property.title}</h3>

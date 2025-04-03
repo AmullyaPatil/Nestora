@@ -138,7 +138,7 @@ const ServiceCard = ({ service, isVisible, delay, scrollToSection }: ServiceCard
       style={{ transitionDelay: `₹{delay}ms` }}
     >
       <div className={`w-12 h-12 ₹{color} rounded-lg flex items-center justify-center mb-5`}>
-        <Icon className="h-6 w-6 text-white" />
+        <Icon className="h-6 w-6 text-blue" />
       </div>
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-4">{description}</p>
