@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import AllLocalities from "./pages/AllLocalities";
+import AllProperties from "./pages/AllProperties";
 import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -26,6 +27,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/localities" element={<AllLocalities />} />
+              <Route path="/properties" element={<AllProperties />} />
               <Route path="/wishlist" element={
                 <ProtectedRoute>
                   <Wishlist />

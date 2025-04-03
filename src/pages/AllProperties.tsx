@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useWishlist, WishlistProperty } from '@/contexts/WishlistContext';
+import PropertyDetails from '@/components/PropertyDetails';
 
 const allProperties = [
   {
@@ -180,6 +181,8 @@ const isPropertyInPriceRange = (propertyPrice: string, priceRange: string): bool
 const AllProperties = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [filteredProperties, setFilteredProperties] = useState(allProperties);
+  const [selectedProperty, setSelectedProperty] = useState<typeof allProperties[0] | null>(null);
+  const [isPropertyDetailsOpen, setIsPropertyDetailsOpen] = useState(false);
   const location = useLocation();
   const { toast } = useToast();
   
@@ -219,6 +222,11 @@ const AllProperties = () => {
       });
     }
   }, [location.search, toast]);
+
+  const handlePropertyClick = (property: typeof allProperties[0]) => {
+    setSelectedProperty(property);
+    setIsPropertyDetailsOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -290,12 +298,19 @@ const AllProperties = () => {
                   property={property} 
                   isVisible={isVisible}
                   delay={index * 100}
+                  onClick={() => handlePropertyClick(property)}
                 />
               ))}
             </div>
           )}
         </div>
       </div>
+
+      <PropertyDetails 
+        property={selectedProperty}
+        isOpen={isPropertyDetailsOpen}
+        onClose={() => setIsPropertyDetailsOpen(false)}
+      />
     </div>
   );
 };
@@ -304,14 +319,17 @@ interface PropertyCardProps {
   property: typeof allProperties[0];
   isVisible: boolean;
   delay: number;
+  onClick: () => void;
 }
 
-const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
+const PropertyCard = ({ property, isVisible, delay, onClick }: PropertyCardProps) => {
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { toast } = useToast();
   const isFavorite = isInWishlist(property.id);
 
-  const handleToggleWishlist = () => {
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click event
+    
     if (isFavorite) {
       removeFromWishlist(property.id);
       toast({
@@ -330,12 +348,13 @@ const PropertyCard = ({ property, isVisible, delay }: PropertyCardProps) => {
   return (
     <div 
       className={cn(
-        "property-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-subtle transition-all duration-700",
+        "property-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-subtle transition-all duration-700 cursor-pointer hover:shadow-md",
         isVisible 
           ? "opacity-100 translate-y-0" 
           : "opacity-0 translate-y-10"
       )}
       style={{ transitionDelay: `₹{delay}ms` }}
+      onClick={onClick}
     >
       {/* Image container */}
       <div className="relative img-hover-zoom h-64">
