@@ -80,7 +80,7 @@ const Header = () => {
         {/* Logo */}
         <a href="/" className="flex items-center">
           <span className="text-2xl font-display font-bold text-Nestora-dark">
-            Estate<span className="text-Nestora-blue">Hub</span>
+            Nestora<span className="text-Nestora-blue">Hub</span>
           </span>
         </a>
 
